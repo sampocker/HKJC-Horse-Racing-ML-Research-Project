@@ -289,9 +289,8 @@ def _parse_meta(tables: list[Node]) -> _Meta:
             c
             for c in col0
             if c
-            and c == c.upper()
+            and (c == c.upper() or "HANDICAP" in c.upper())
             and not _RACE_HEADER_RE.search(c)
-            and not _CLASS_LINE_RE.search(c)
             and not c.upper().startswith("HK$")
             and any(ch.isalpha() for ch in c)
         ),
