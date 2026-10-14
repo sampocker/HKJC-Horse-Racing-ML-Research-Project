@@ -1,1 +1,33 @@
+name: HKJC Race Day
 
+on:
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Create virtual environment
+        run: uv venv .venv
+
+      - name: Install dependencies
+        run: |
+          source .venv/bin/activate
+          uv pip install typer pydantic pydantic-settings pyyaml structlog tzdata duckdb polars httpx selectolax tenacity aiolimiter
+
+      - name: Verify HKJC program
+        run: |
+          source .venv/bin/activate
+          PYTHONPATH=src python -m hkjc.cli --help
